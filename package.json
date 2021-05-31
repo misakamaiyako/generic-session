@@ -1,6 +1,6 @@
 {
 	"name": "session-center",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "a sample session manager for nodejs",
 	"main": "./src/index.js",
 	"scripts": {
