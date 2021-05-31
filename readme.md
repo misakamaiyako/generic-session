@@ -2,15 +2,15 @@
 
 Small, fast minimalist session manager for [node](http://nodejs.org).
 
-	[![NPM Version][npm-image]][npm-url]
-	[![NPM Downloads][downloads-image]][downloads-url]
+![NPM](https://img.shields.io/npm/l/session-center)
+![npm](https://img.shields.io/npm/dw/session-center)
 
 ## Installation
 
 this module is server side only, install it by next command:
 
 ```shell
-$ npm install generic-session
+$ npm install session-center
 ```
 
 ## Features
@@ -24,9 +24,9 @@ $ npm install generic-session
 
 ```js
 //in js
-const sessionCenter = new GenericSession(config ?)
+const sessionCenter = new SessionCenter(config?)
 // in ts
-const sessionCenter = new GenericSession < sessionContent ?>(config?)
+const sessionCenter = new SessionCenter < sessionContent?>(config?)
 ```
 
 ## Config
@@ -51,14 +51,14 @@ notice: If neither expires nor max-age specified, it will expire at the end of s
 
 ## Functions
 
-1. removeSession(req: IncomingMessage, res: ServerResponse): void;
+1. `removeSession(req: IncomingMessage, res: ServerResponse): void;`
 
 	remove session content of current request.
 
-2.  getSession(req: IncomingMessage | string, res?: ServerResponse): SessionContent | false;
+2.  `getSession(req: IncomingMessage | string, res?: ServerResponse): SessionContent | false;`
 	1. if typeof res === 'string': get session of current cookie, if get false, means this cookie is invalidation, you should remove it later.
 	2. req and res should both be specified, it will auto remove cookie if cookie is expires
 	
-3. setSession(sessionContent: SessionContent, req?: IncomingMessage, res?: ServerResponse): string;
+3. `setSession(sessionContent: SessionContent, req?: IncomingMessage, res?: ServerResponse): string;`
 
 	store session content and set cookie to response and return the cookie string. if req and res is not specified, user should set it to res later
