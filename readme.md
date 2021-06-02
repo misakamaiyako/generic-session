@@ -1,4 +1,4 @@
-# Generic Session
+# Session Center
 
 Small, fast minimalist session manager for [node](http://nodejs.org).
 
@@ -49,16 +49,16 @@ const sessionCenter = new SessionCenter < sessionContent?>(config?)
 
 notice: If neither expires nor max-age specified, it will expire at the end of session.
 
-## Functions
+## Usage
 
-1. `removeSession(req: IncomingMessage, res: ServerResponse): void;`
+1. `sessionCenter.removeSession(req: IncomingMessage, res: ServerResponse): void;`
 
 	remove session content of current request.
 
-2.  `getSession(req: IncomingMessage | string, res?: ServerResponse): SessionContent | false;`
+2.  `sessionCenter.getSession(req: IncomingMessage | string, res?: ServerResponse): SessionContent | false;`
 	1. if typeof res === 'string': get session of current cookie, if get false, means this cookie is invalidation, you should remove it later.
 	2. req and res should both be specified, it will auto remove cookie if cookie is expires
 	
-3. `setSession(sessionContent: SessionContent, req?: IncomingMessage, res?: ServerResponse): string;`
+3. `sessionCenter.setSession(sessionContent: SessionContent, req?: IncomingMessage, res?: ServerResponse): string;`
 
-	store session content and set cookie to response and return the cookie string. if req and res is not specified, user should set it to res later
+	store session content and set cookie to response and return the cookie string. if req and res are both not specified, user should set the return cookie to response header later

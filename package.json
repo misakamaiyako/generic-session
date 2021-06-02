@@ -1,6 +1,6 @@
 {
 	"name": "session-center",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"description": "a sample session manager for nodejs",
 	"main": "./src/index.js",
 	"scripts": {
@@ -14,6 +14,11 @@
 	"author": {
 		"name": "misakamaiyako",
 		"url": "https://github.com/misakamaiyako"
+	},
+	"homepage": "https://github.com/misakamaiyako/generic-session#readme",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/misakamaiyako/generic-session.git"
 	},
 	"type": "commonjs",
 	"dependencies": {
