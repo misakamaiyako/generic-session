@@ -9,9 +9,10 @@ var cookie = require("cookie");
 var storeName = Symbol("sessionCenter");
 var sessionCenter = /** @class */ (function () {
     function sessionCenter(props) {
+        if (props === void 0) { props = {}; }
         this[_a] = new Map();
         this.idToSession = new Map();
-        var _b = props || {}, _c = _b.name, name = _c === void 0 ? "sessionId" : _c, maxAge = _b.maxAge, domain = _b.domain, _d = _b.secure, secure = _d === void 0 ? true : _d, path = _b.path, useExpires = _b.useExpires, _e = _b.httpOnly, httpOnly = _e === void 0 ? true : _e, _f = _b.sameSite, sameSite = _f === void 0 ? "lax" : _f, singlePoint = _b.singlePoint;
+        var _b = props.name, name = _b === void 0 ? "sessionId" : _b, maxAge = props.maxAge, domain = props.domain, _c = props.secure, secure = _c === void 0 ? true : _c, path = props.path, useExpires = props.useExpires, _d = props.httpOnly, httpOnly = _d === void 0 ? true : _d, _e = props.sameSite, sameSite = _e === void 0 ? "lax" : _e, singlePoint = props.singlePoint;
         // if (props && props.useRedis) {
         // 	console.log("sorry, redis is not supported yet");
         // }
@@ -54,7 +55,12 @@ var sessionCenter = /** @class */ (function () {
     sessionCenter.prototype.getSessionID = function (cookies) {
         var encrypted = cookie.parse(cookies)[this.config.name];
         if (encrypted) {
-            return this.decryption(encrypted);
+            try {
+                return this.decryption(encrypted);
+            }
+            catch (e) {
+                return "";
+            }
         }
         else {
             return "";
@@ -119,6 +125,32 @@ var sessionCenter = /** @class */ (function () {
             this.setCookie(res, cookieId);
         }
         return cookieId;
+    };
+    sessionCenter.prototype.remove = function (filter) {
+        if (filter) {
+            var store = this[storeName];
+            var entries = store.entries();
+            var next = void 0;
+            while (!(next = entries.next()).done) {
+                if (filter(next.value[1])) {
+                    store.delete(next.value[0]);
+                }
+            }
+        }
+        else {
+            this[storeName].clear();
+        }
+    };
+    sessionCenter.prototype.find = function (filter) {
+        var values = this[storeName].values();
+        var result = [];
+        var next;
+        while (!(next = values.next()).done) {
+            if (filter(next.value)) {
+                result.push(next.value);
+            }
+        }
+        return result;
     };
     sessionCenter.prototype.setCookie = function (res, cookie) {
         var headers = res.getHeaders();

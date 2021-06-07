@@ -16,12 +16,14 @@ declare class sessionCenter<SessionContent = any> {
     private readonly config;
     private readonly encryption;
     private readonly decryption;
-    constructor(props: SettingProps);
+    constructor(props?: SettingProps);
     private getSessionID;
     private genericCookie;
     removeSession(req: IncomingMessage, res: ServerResponse): void;
     getSession(req: IncomingMessage | string, res?: ServerResponse): SessionContent | false;
     setSession(sessionContent: SessionContent, req?: IncomingMessage, res?: ServerResponse): string;
+    remove(filter?: ((SessionContent: SessionContent) => boolean)): void;
+    find(filter: (SessionContent: SessionContent) => boolean): SessionContent[];
     private setCookie;
 }
 export = sessionCenter;

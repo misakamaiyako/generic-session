@@ -24,7 +24,7 @@ class sessionCenter<SessionContent = any> {
 	private readonly encryption: (key: string) => string;
 	private readonly decryption: (text: string) => string;
 
-	constructor(props: SettingProps) {
+	constructor(props: SettingProps={}) {
 		let {
 			name = "sessionId",
 			maxAge,
@@ -35,7 +35,7 @@ class sessionCenter<SessionContent = any> {
 			httpOnly = true,
 			sameSite = "lax",
 			singlePoint,
-		} = props || {};
+		} = props;
 		// if (props && props.useRedis) {
 		// 	console.log("sorry, redis is not supported yet");
 		// }
@@ -77,7 +77,11 @@ class sessionCenter<SessionContent = any> {
 	private getSessionID(cookies: string) {
 		const encrypted = cookie.parse(cookies)[this.config.name];
 		if (encrypted) {
-			return this.decryption(encrypted);
+			try{
+				return this.decryption(encrypted);
+			} catch (e) {
+				return ""
+			}
 		} else {
 			return "";
 		}
@@ -142,6 +146,33 @@ class sessionCenter<SessionContent = any> {
 			this.setCookie(res, cookieId);
 		}
 		return cookieId;
+	}
+
+	remove(filter?: ((SessionContent: SessionContent) => boolean)) {
+		if (filter) {
+			const store = this[storeName];
+			const entries = store.entries();
+			let next: IteratorResult<[string, SessionContent]>;
+			while (!(next = entries.next()).done) {
+				if (filter(next.value[1])) {
+					store.delete(next.value[0]);
+				}
+			}
+		} else {
+			this[storeName].clear();
+		}
+	}
+
+	find(filter: (SessionContent: SessionContent) => boolean):SessionContent[] {
+		const values = this[storeName].values()
+		const result:SessionContent[] = []
+		let next: IteratorResult<SessionContent>
+		while (!(next=values.next()).done){
+			if (filter(next.value)){
+				result.push(next.value)
+			}
+		}
+		return result
 	}
 
 	private setCookie(res: ServerResponse, cookie: string) {
