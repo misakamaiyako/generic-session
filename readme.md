@@ -61,4 +61,12 @@ notice: If neither expires nor max-age specified, it will expire at the end of s
 	
 3. `sessionCenter.setSession(sessionContent: SessionContent, req?: IncomingMessage, res?: ServerResponse): string;`
 
-	store session content and set cookie to response and return the cookie string. if req and res are both not specified, user should set the return cookie to response header later
+	store session content and set cookie to response and return the cookie string. if req and res are both not specified, user should set the return cookie to response header later.
+
+3. `sessionCenter.remove(filter?: ((SessionContent: SessionContent) => boolean))`
+
+	accept a filter function, all stored session which passed filter fun will be removed, or clear all session when no filter is specified.
+
+4. `sessionCenter.find(filter: ((SessionContent: SessionContent) => boolean)):SessionContent[]`
+
+	return all session passed specified filter with an array
